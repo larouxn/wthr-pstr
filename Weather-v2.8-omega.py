@@ -264,7 +264,7 @@ while 1 == 1:
         #aslong as cycle hasn't gone for 55mins, we continue
         while pin_timer <= 3300:
                 print(pin_timer)
-                call(["logger", "-t", "weather", pin_timer])
+                call(["logger", "-t", "weather", str(pin_timer)])
                 try:
                     
                     #8am
@@ -349,19 +349,19 @@ while 1 == 1:
                                 pin_timer = pin_timer + 275
                                 time.sleep(275)
                                 print(pin_timer)
-                                call(["logger", "-t", "weather", pin_timer])
+                                call(["logger", "-t", "weather", str(pin_timer)])
 
                         except:
                                 pin_timer = pin_timer + 275
                                 time.sleep(275)
                                 print(pin_timer)
-                                call(["logger", "-t", "weather", pin_timer])
+                                call(["logger", "-t", "weather", str(pin_timer)])
 
                 else:
                         pin_timer = pin_timer + 275
                         time.sleep(275)
                         print(pin_timer)
-                        call(["logger", "-t", "weather", pin_timer])
+                        call(["logger", "-t", "weather", str(pin_timer)])
 
                         
 
