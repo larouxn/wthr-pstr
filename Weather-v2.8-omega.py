@@ -231,7 +231,7 @@ while 1 == 1:
             forecast['12:00'] = twelve_saved_weather          
 
         print(forecast)
-        call(["logger", "-t", "weather", forecast])
+        call(["logger", "-t", "weather", str(forecast)])
 
         #####getting temperature of this hour#####
         try:
@@ -389,13 +389,13 @@ while 1 == 1:
         #with the sleep above and sleep below, thats 60mins, so we add +1 hour to the local_time object
         local_time = get_time()
         print("time is "+(str(local_time)))
-        call(["logger", "-t", "weather", local_time])
+        call(["logger", "-t", "weather", str(local_time)])
 
     else:
         #checks every 30 mins to see if it's time to start turning pins on again
         print('sleep_mode')
         print("time is "+(str(local_time)))
-        call(["logger", "-t", "weather", local_time])
+        call(["logger", "-t", "weather", str(local_time)])
         time.sleep(1800)
         
         #turning pins off for sleep mode
