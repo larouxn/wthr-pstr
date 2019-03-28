@@ -119,7 +119,7 @@ except:
 while 1 == 1:
     print('enter loop')    
     #Loops between 5am and 11pm
-    while local_time >= 5 and local_time <= 23:
+    while local_time >= 4 and local_time <= 23:
         print('in second loop')
 
         #closing log
@@ -371,9 +371,6 @@ while 1 == 1:
 
 
 
-
-
-
         #with the sleep above and sleep below, thats 60mins, so we add +1 hour to the local_time object
         local_time = get_time()
         print("time is "+(str(local_time)))
@@ -381,45 +378,21 @@ while 1 == 1:
         #sys.stdout = old_stdout
         #log_file.close()
 
-
     else:
         #checks every 30 mins to see if it's time to start turning pins on again
         print('sleep_mode')
         print("time is "+(str(local_time)))
+        time.sleep(1800)
         
         #turning pins off for sleep mode
         #try:
             #clear_pins()
         #except:
-            # print('')
-        
-        time.sleep(1800)
+            # print('')       
+
         local_time = get_time()
+        
         #open log
         #log_file = open("/root/log/log","w")
         #sys.stdout = log_file
         
-        #need to reset time manually to 0 once it gets to 24hrs as the obj is just an int, it doesn't know it's a clock
-        if local_time >= 23 or local_time == 24:
-
-            #turning pins off for sleep mode
-            #try:
-                #clear_pins()
-            #except:
-                #= print('')
-                
-            #getting maxmind info again, once local_time timer object reaches 24.Time will be reset to 0
-            #this is also a good oportunity to schedule our 1 call for the day, as it will only happen once every 24hrs
-            print('12pm, so time reset - called from comp clock before making an int again')
-
-            #Wiping weather forecast dictionary
-            forecast = {'test':'0'}
-
-            try:
-                local_time = get_time()
-
-            except:
-                print('timezone or local time error')
-        else:
-                time.sleep(0)
-
