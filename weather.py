@@ -1,3 +1,4 @@
+#this is Weather-3.0-Omega
 import requests, json, time, sys
 from datetime import datetime
 from pytz import timezone
@@ -26,8 +27,15 @@ while online is False:
 print('We are online')
 call(["logger", "-t", "weather", "we are online"])
 
-#Setting up Omega's pins
+config = '/root/config.txt'
+creds = open(config,'r').read().split('\n')
 
+max1 = creds[0]
+max2 = creds[1]
+api = creds[2]
+
+
+#Setting up Omega's pins
 try:
     omega = OmegaGPIO()
 
@@ -64,7 +72,7 @@ except:
 
 try:
     #getting maxmind info for own IP address
-    r = requests.get('https://geoip.maxmind.com/geoip/v2.1/city/me', auth=('138089', 'j9Bmlulq9c6i'))
+    r = requests.get('https://geoip.maxmind.com/geoip/v2.1/city/me', auth=(max1, max2))
     maxmind_info = r.json()
     location_info = maxmind_info['location']
 
@@ -106,8 +114,6 @@ except:
 
 
 try:
-    #AccuWeather API
-    api = 'MNH5Q4mOjWPmAFOGFEJqgSO5rLl7zwSs'
 
     #Api locations finder
     URL = 'http://dataservice.accuweather.com/locations/v1/cities/geoposition/search.json?q='+ coordinates +'&apikey='+ api
