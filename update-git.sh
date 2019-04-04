@@ -1,3 +1,3 @@
-cd /root/weather-poster
+cd /root/wthr-pstr
 git pull
-chmod +x /root/weather-poster/gpiomux.sh
+chmod +x /root/wthr-pstr/gpiomux.sh
