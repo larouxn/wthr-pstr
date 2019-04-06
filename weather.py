@@ -3,18 +3,9 @@ from datetime import datetime
 from pytz import timezone
 from subprocess import call
 from omega_gpio import OmegaGPIO
+from some_functions import connected_to_internet, are_you_subscribed, clear_pins
 
 #Making sure we're connected to the internet, otherwise we just loop and keep checking
-
-def connected_to_internet(url='http://www.google.com/', timeout=5):
-    try:
-        _ = requests.get(url, timeout=timeout)
-        #print("we're online")
-        return True
-    except requests.ConnectionError:
-        #print("No internet connection available.")
-        return False
-    
 online = connected_to_internet()
 
 while online is False:
@@ -26,6 +17,16 @@ while online is False:
 print('We are online')
 call(["logger", "-t", "weather", "we are online"])
 
+#Are you subscribed
+subscribed = are_you_subscribed()
+
+while subscribed == 'unsubscribed':
+    print('unsubscribed')
+    call(["logger", "-t", "weather", "unsubscribed"])
+    time.sleep(1800)
+    subscribed = are_you_subscribed()
+
+#handling creds
 config = '/root/.config.txt'
 creds = open(config,'r').read().split('\n')
 
@@ -37,40 +38,17 @@ api = creds[2]
 #Setting up Omega's pins
 try:
     omega = OmegaGPIO()
-
-    def clear_pins():
-        omega.pin_off(2)
-        omega.pin_off(17)
-        omega.pin_off(16)
-
-        omega.pin_off(15)
-        omega.pin_off(46)
-        omega.pin_off(45) 
-
-        omega.pin_off(19)
-        omega.pin_off(4)
-        omega.pin_off(5)
-
-        omega.pin_off(6)
-        omega.pin_off(1)
-        omega.pin_off(0)
-        omega.pin_off(18)
-
-    try:
-           clear_pins()
-    except:
-           print('failed to set up pins')
-           call(["logger", "-t", "weather", "failed to set up pins"])
-           
+    clear_pins()
     print('GPIO enabled')
     call(["logger", "-t", "weather", "GPIO enabled"])
-        
+           
 except:
-    print('cant enable Omega GPIO')
-    call(["logger", "-t", "weather", "cant enable Omega GPIO"])
-
+    print('failed to set up pins')
+    call(["logger", "-t", "weather", "failed to set up pins"])
+           
+#getting maxmind info for own IP address
 try:
-    #getting maxmind info for own IP address
+    
     r = requests.get('https://geoip.maxmind.com/geoip/v2.1/city/me', auth=(max1, max2))
     maxmind_info = r.json()
     location_info = maxmind_info['location']
@@ -89,7 +67,7 @@ except:
     print('ip info error')
     call(["logger", "-t", "weather", "ip info error"])
 
-
+#getting local time, now we have max mind info
 def get_time():
     TZ = location_info['time_zone']
     #using timezone ID to get local time
@@ -108,10 +86,8 @@ try:
 except:
     print('couldnt get time')
     call(["logger", "-t", "weather", "couldnt get time"])
-    
 
-
-
+#getting weather info
 try:
 
     #Api locations finder
