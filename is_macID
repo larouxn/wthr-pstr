@@ -1,0 +1,22 @@
+import requests, time
+
+try:
+    #import macID.txt and turn into an obj
+    macID_txt = '/root/macID.txt'
+    macIDlist = open(macID_txt,'r').read().split('\n')
+    macID = macIDlist[0]
+    #import unsub list and turn into a list
+    unsub_txt = '/root/wthr-pstr/unsubscribed.txt'
+    unsub = open(unsub_txt,'r').read().split('\n')
+    
+except:
+    print('cant sort out mac IDs')
+
+while macID in unsub:
+    print('unsubscribed')
+    time.sleep(5)
+    #time.sleep(1800)
+    #sleep 30 mins
+    unsub = open(unsub_txt,'r').read().split('\n')
+
+print('finish')
