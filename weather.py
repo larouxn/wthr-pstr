@@ -111,11 +111,11 @@ try:
     #Adding :00 to each key
     forecast = {f'{k}:00': v for k, v in forecast.items()}
 
-
 except:
     print('fail getting weather data')
     call(["logger", "-t", "weather", "fail getting weather data"])
 
+#Setup is complete, now we go into the main loop
 while 1 == 1:
     print('enter loop')
     call(["logger", "-t", "weather", "enter loop"])
@@ -172,7 +172,7 @@ while 1 == 1:
             #Adding :00 to each key
             old_forecast = {f'{k}:00': v for k, v in old_forecast.items()}
 
-            #Get old weather data for specified location request, then parse to list
+            #Get historical weather data for specified location request, then parse to list
             old_weatherURL= 'http://dataservice.accuweather.com/currentconditions/v1/' + geokey + '/historical/24?apikey=' + api
             old_res = requests.get(old_weatherURL)
             old_weatherdata = old_res.json()
@@ -254,16 +254,10 @@ while 1 == 1:
 
         #######GPIO_Allocation#######
 
-        #Class conversions
-
-        #Rainy - 'Rain' 'Showers' 'Fog' 'Flurries' 'T-storms'
-        #Cloudy - 'Mostly Cloudy' 'Partly Cloudy' 'Cloudy'
-        #Sunny - 'Clear' 'Partly sunny' 'Mostly Sunny' 'Sunny'
-
-
         #Turning on correct pins/icons
         pin_timer = 0
         clear_pins()
+        #Class conversions
         Rain = ['Rain', 'Showers', 'Fog', 'Flurries', 'T-storms', 'Snow', 'Mostly Cloudy w/ Showers', 'Partly Sunny w/ Showers', 'Mostly Cloudy w/ T-Storms', 'Partly Sunny w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Partly Sunny w/ Flurries', 'Mostly Cloudy w/ Snow', 'Ice', 'Sleet', 'Freezing Rain', 'Rain and Snow', 'Partly Cloudy w/ Showers', 'Mostly Cloudy w/ Showers', 'Partly Cloudy w/ T-Storms', 'Mostly Cloudy w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Mostly Cloudy w/ Snow']
         Cloud = ['Mostly cloudy', 'A shower', 'Partly cloudy', 'Intermittent clouds', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds']
         Sun = ['Clear', 'Partly sunny', 'Mostly sunny', 'Sunny', 'Hazy', 'Hazy sunshine', 'Intermittent Clouds', 'Mostly clear', 'Clouds and sun']
@@ -329,7 +323,7 @@ while 1 == 1:
                         call(["logger", "-t", "weather", "20R"])
 
                     if forecast['20:00'] in Cloud:
-                        omega.pin_on(1)
+                        omega.pin_on(3)
                         print('20C')
                         call(["logger", "-t", "weather", "20C"])
 
@@ -346,38 +340,12 @@ while 1 == 1:
                     pin_timer = pin_timer + 550
                     time.sleep(550)
 
-                if temp >= 88 or temp == 88:
-                        
-                        try:
-                                print('31c or hotter so pins off for 5')
-                                call(["logger", "-t", "weather", "31C or hotter so pins off for 5"])
-                                clear_pins()
-
-                                pin_timer = pin_timer + 275
-                                time.sleep(275)
-                                print(pin_timer)
-                                call(["logger", "-t", "weather", str(pin_timer)])
-
-                        except:
-                                pin_timer = pin_timer + 275
-                                time.sleep(275)
-                                print(pin_timer)
-                                call(["logger", "-t", "weather", str(pin_timer)])
-
-                else:
-                        pin_timer = pin_timer + 275
-                        time.sleep(275)
-                        print(pin_timer)
-                        call(["logger", "-t", "weather", str(pin_timer)])
-
-                        
-
-
                 
         else:
                 print('pins turning off and resetting pin_timer')
                 call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
                 pin_timer = 0
+                local_time = get_time()
 
                 #turning off pins for 5 mins
                 try:
@@ -393,13 +361,13 @@ while 1 == 1:
 
 
 
-        #with the sleep above and sleep below, thats 60mins, so we add +1 hour to the local_time object
+        #Updates local_time
         local_time = get_time()
         print("time is "+(str(local_time)))
         call(["logger", "-t", "weather", str(local_time)])
 
     else:
-        #checks every 30 mins to see if it's time to start turning pins on again
+        #sleeps and updates local_time
         print('sleep_mode')
         print("time is "+(str(local_time)))
         call(["logger", "-t", "weather", str(local_time)])
