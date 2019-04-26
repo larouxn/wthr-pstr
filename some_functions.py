@@ -36,16 +36,15 @@ def clear_pins():
 
         omega.pin_off(15)
         omega.pin_off(46)
-        omega.pin_off(45) 
+        omega.pin_off(13) 
+
+        omega.pin_off(3)
+        omega.pin_off(0)
+        omega.pin_off(18)
 
         omega.pin_off(19)
         omega.pin_off(4)
         omega.pin_off(5)
-
-        omega.pin_off(6)
-        omega.pin_off(1)
-        omega.pin_off(0)
-        omega.pin_off(18)
         
     except:
         print('pin problems')
