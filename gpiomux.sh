@@ -12,17 +12,17 @@ fast-gpio set-output 2
 fast-gpio set-output 17
 fast-gpio set-output 16
 
-fast-gpio set-output 13
-fast-gpio set-output 46
 fast-gpio set-output 15
+fast-gpio set-output 46
+fast-gpio set-output 13
+
+fast-gpio set-output 3
+fast-gpio set-output 0
+fast-gpio set-output 18
 
 fast-gpio set-output 19
 fast-gpio set-output 4
 fast-gpio set-output 5
-
-fast-gpio set-output 18
-fast-gpio set-output 1
-fast-gpio set-output 0
 
 fast-gpio set-output 38
 
