@@ -18,4 +18,4 @@ echo $macId
 }
 
 uid=$(generateMacUid)
-echo "$uid” >/root/macID.txt
+echo "$uid" >/root/macID.txt
