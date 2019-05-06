@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## Generate UID based on device's MAC addr for ra0 intf
 generateMacUid () {
