@@ -338,6 +338,8 @@ while 1 == 1:
                 while pin_timer <= 1199:
                     #introductory 20mins of pins on
                     try:
+                        #do pins_on twice, as sometimes GPIO commands get ignored
+                        pins_on()
                         pins_on()
                         pin_timer = pin_timer + 1200
                         time.sleep(240)
