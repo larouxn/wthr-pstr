@@ -342,6 +342,7 @@ while 1 == 1:
                     time.sleep(60)
                     
             while pin_timer >= 900:
+                call(["logger", "-t", "weather", "pins now in pulse mode"])
                 #Now pins puse 1 min off, 3 mins on. Once initial 15mins has happened.
                 try:
                     clear_pins()
