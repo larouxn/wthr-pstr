@@ -262,12 +262,13 @@ while 1 == 1:
         Cloud = ['Mostly cloudy', 'A shower', 'Partly cloudy', 'Intermittent clouds', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds']
         Sun = ['Clear', 'Partly sunny', 'Mostly sunny', 'Sunny', 'Hazy', 'Hazy sunshine', 'Intermittent Clouds', 'Mostly clear', 'Clouds and sun']
 
-        #aslong as cycle hasn't gone for 55mins, we continue
-        while pin_timer <= 3300:
+        #aslong as cycle hasn't gone for 60mins, we continue
+        while pin_timer <= 3598:
+            #first 15mins of pins fully on
+            while pin_timer <= 899:
                 print(pin_timer)
                 call(["logger", "-t", "weather", str(pin_timer)])
-                try:
-                    
+                try:                    
                     #8am
                     if forecast['8:00'] in Rain:                        
                         omega.pin_on(2)
@@ -332,33 +333,99 @@ while 1 == 1:
                         print('20S')
                         call(["logger", "-t", "weather", "20S"])
 
-                    pin_timer = pin_timer + 550
-                    time.sleep(550)
+                    pin_timer = pin_timer + 900
+                    time.sleep(900)
                     
-                # If there's problems getting weather, program just waits before trying in next loop around.    
+                # If there's problems getting weather, program just waits a min before trying in next loop around.    
                 except:
-                    pin_timer = pin_timer + 550
-                    time.sleep(550)
+                    pin_timer = pin_timer + 60
+                    time.sleep(60)
+                    
+            while pin_timer >= 900:
+                #Now pins puse 1 min off, 3 mins on. Once initial 15mins has happened.
+                try:
+                    clear_pins()
+                    time.sleep(60)
+                    pin_timer = pin_timer + 60
+                    
+                    #8am
+                    if forecast['8:00'] in Rain:                        
+                        omega.pin_on(2)
+                        print('8R')
+                        call(["logger", "-t", "weather", "8R"])
 
+                    if forecast['8:00'] in Cloud:
+                        omega.pin_on(17)
+                        print('8C')
+                        call(["logger", "-t", "weather", "8C"])
+
+                    if forecast['8:00'] in Sun:
+                        omega.pin_on(16)
+                        print('8S')
+                        call(["logger", "-t", "weather", "8S"])
+
+                    #12pm
+                    if forecast['12:00'] in Rain: 
+                        omega.pin_on(15)
+                        print('12R')
+                        call(["logger", "-t", "weather", "12R"])
+
+                    if forecast['12:00'] in Cloud: 
+                        omega.pin_on(46)
+                        print('12C')
+                        call(["logger", "-t", "weather", "12C"])
+
+                    if forecast['12:00'] in Sun:
+                        omega.pin_on(13)
+                        print('12S')
+                        call(["logger", "-t", "weather", "12S"])
+
+                    #4pm
+                    if forecast['16:00'] in Rain:
+                        omega.pin_on(19)
+                        print('16R')
+                        call(["logger", "-t", "weather", "16R"])
+
+                    if forecast['16:00'] in Cloud:
+                        omega.pin_on(4)
+                        print('16C')
+                        call(["logger", "-t", "weather", "16C"])
+
+                    if forecast['16:00'] in Sun:
+                        omega.pin_on(5)
+                        print('16S')
+                        call(["logger", "-t", "weather", "16S"])
+
+                    #8pm
+                    if forecast['20:00'] in Rain:
+                        omega.pin_on(18)
+                        print('20R')
+                        call(["logger", "-t", "weather", "20R"])
+
+                    if forecast['20:00'] in Cloud:
+                        omega.pin_on(3)
+                        print('20C')
+                        call(["logger", "-t", "weather", "20C"])
+
+                    if forecast['20:00'] in Sun:
+                        omega.pin_on(0)
+                        print('20S')
+                        call(["logger", "-t", "weather", "20S"])
+                    
+                    time.sleep(180)
+                    pin_timer = pin_timer + 180
+                    
+                except:
+                    print('problem pin pulsing')
+                    time.sleep(60)
+                    pin_timer = pin_timer + 60                    
+                    
                 
         else:
                 print('pins turning off and resetting pin_timer')
                 call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
                 pin_timer = 0
                 local_time = get_time()
-
-                #turning off pins for 5 mins
-                try:
-                        print('55mins up, time for a 5min break')
-                        call(["logger", "-t", "weather", "55mins up, time for a 5min break"])
-                        time.sleep(300)
-                        clear_pins()
-                        
-                except:
-                        print('55mins up, time for a 5min break')
-                        call(["logger", "-t", "weather", "55mins up, timne for a 5min break"])
-                        time.sleep(300)
-
 
 
         #Updates local_time
