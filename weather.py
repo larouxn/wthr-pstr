@@ -362,15 +362,15 @@ while 1 == 1:
 
                 #turning off pins for 5 mins
                 try:
-                        print('55mins up, time for a 5min break')
+                        print('60mins up, time for a 3min break')
                         call(["logger", "-t", "weather", "55mins up, time for a 5min break"])
-                        time.sleep(300)
+                        time.sleep(180)
                         clear_pins()
                         
                 except:
-                        print('55mins up, time for a 5min break')
+                        print('60mins up, time for a 3min break')
                         call(["logger", "-t", "weather", "55mins up, timne for a 5min break"])
-                        time.sleep(300)
+                        time.sleep(180)
 
 
 
