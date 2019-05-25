@@ -258,7 +258,7 @@ while 1 == 1:
         pin_timer = 0
         clear_pins()
         #Class conversions
-        Rain = ['Rain', 'Showers', 'Fog', 'Light rain shower', 'Flurries', 'T-storms', 'Snow', 'Mostly Cloudy w/ Showers', 'Partly Sunny w/ Showers', 'Mostly Cloudy w/ T-Storms', 'Partly Sunny w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Partly Sunny w/ Flurries', 'Mostly Cloudy w/ Snow', 'Ice', 'Sleet', 'Freezing Rain', 'Rain and Snow', 'Partly Cloudy w/ Showers', 'Mostly Cloudy w/ Showers', 'Partly Cloudy w/ T-Storms', 'Mostly Cloudy w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Mostly Cloudy w/ Snow']
+        Rain = ['Rain', 'Showers', 'Fog', 'Light rain shower', 'Flurries', 'T-storms', 'Snow', 'Mostly cloudy w/ showers', 'Partly Sunny w/ Showers', 'Mostly Cloudy w/ T-Storms', 'Partly Sunny w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Partly Sunny w/ Flurries', 'Mostly Cloudy w/ Snow', 'Ice', 'Sleet', 'Freezing Rain', 'Rain and Snow', 'Partly Cloudy w/ Showers', 'Mostly Cloudy w/ Showers', 'Partly Cloudy w/ T-Storms', 'Mostly Cloudy w/ T-Storms', 'Mostly Cloudy w/ Flurries', 'Mostly Cloudy w/ Snow']
         Cloud = ['Mostly cloudy', 'A shower', 'Partly cloudy', 'Intermittent clouds', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds']
         Sun = ['Clear', 'Partly sunny', 'Mostly sunny', 'Sunny', 'Hazy', 'Hazy sunshine', 'Intermittent Clouds', 'Mostly clear', 'Clouds and sun']
 
