@@ -262,8 +262,8 @@ while 1 == 1:
         Cloud = ['Mostly cloudy', 'A shower', 'Partly cloudy', 'Intermittent clouds', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds']
         Sun = ['Clear', 'Partly sunny', 'Mostly sunny', 'Sunny', 'Hazy', 'Hazy sunshine', 'Intermittent Clouds', 'Mostly clear', 'Clouds and sun']
 
-        #aslong as cycle hasn't gone for 55mins, we continue
-        while pin_timer <= 3300:
+        #Cycle lasts 60mins
+        while pin_timer <= 3599:
                 print(pin_timer)
                 call(["logger", "-t", "weather", str(pin_timer)])
                 try:
@@ -332,13 +332,26 @@ while 1 == 1:
                         print('20S')
                         call(["logger", "-t", "weather", "20S"])
 
-                    pin_timer = pin_timer + 550
-                    time.sleep(550)
+                    if pin_timer <= 899:
+                        #intro 15mins on
+                        time.sleep(900)
+                        pin_timer = pin_timer + 900
+                    else:
+                        #Pulse - 3mins on
+                        time.sleep(180)
+                        pin_timer = pin_timer + 180
+                        call(["logger", "-t", "weather", "just 3 mins on before 1 min off"])
+                        print("just 3 mins on before 1 min off")
+
+                    #Pulse - 1min off
+                    clear_pins()
+                    time.sleep(60)
+                    pin_timer = pin_timer + 60
                     
-                # If there's problems getting weather, program just waits before trying in next loop around.    
+                # If there's problems turning on pins, we wait before re-trying.    
                 except:
-                    pin_timer = pin_timer + 550
-                    time.sleep(550)
+                    pin_timer = pin_timer + 120
+                    time.sleep(120)
 
                 
         else:
