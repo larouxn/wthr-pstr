@@ -151,9 +151,12 @@ while 1 == 1:
 
         #create list of numbers to use in creating forecast w/ build_dict
         numbers = [0,1,2,3,4,5,6,7,8,9,10,11]
-
-        for item in numbers:
-                build_dict(item)
+        
+        try:
+            for item in numbers:
+                    build_dict(item)
+        except:
+            print('failed to build dict')
 
                 
         #accounting for weird AccuWeather format change to 08:00 from 8:00 in early morning.
@@ -248,6 +251,7 @@ while 1 == 1:
                 #temp in fahrenheit
                 temp = temp_details['Value']
                 temp = int(temp)
+                print(temp)
                 
         except:
                 time.sleep(o)
@@ -259,9 +263,8 @@ while 1 == 1:
         clear_pins()
         #Class conversions
         Rain = ['Rain', 'Showers', 'A shower', 'Light rain shower', 'Flurries', 'T-storms', 'Snow', 'Mostly cloudy w/ showers', 'Partly sunny w/ showers', 'Mostly cloudy w/ T-Storms', 'Partly sunny w/ T-Storms', 'Mostly cloudy w/ flurries', 'Partly sunny w/ flurries', 'Mostly cloudy w/ snow', 'Ice', 'Sleet', 'Freezing rain', 'Rain and snow', 'Partly cloudy w/ showers', 'Mostly cloudy w/ showers', 'Partly cloudy w/ T-Storms', 'Mostly cloudy w/ T-Storms', 'Mostly cloudy w/ flurries', 'Mostly cloudy w/ snow']
-        Cloud = ['Mostly cloudy', 'Intermittent clouds', 'Fog', 'Partly cloudy', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds']
+        Cloud = ['Mostly cloudy', 'Fog', 'Partly cloudy', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds', 'Intermittent clouds']
         Sun = ['Clear', 'Partly sunny', 'Mostly sunny', 'Sunny', 'Hazy', 'Hazy sunshine', 'Intermittent Clouds', 'Mostly clear', 'Clouds and sun']
-
         #Cycle lasts 60mins
         while pin_timer <= 3599:
                 print(pin_timer)
@@ -344,9 +347,12 @@ while 1 == 1:
                         print("just 3 mins on before 1 min off")
 
                     #Pulse - 1min off
-                    clear_pins()
-                    time.sleep(60)
-                    pin_timer = pin_timer + 60
+                    if temp <= 53:
+                        clear_pins()
+                        time.sleep(60)
+                        pin_timer = pin_timer + 60
+                    else:
+                        print('too warm for pulsing')
                     
                 # If there's problems turning on pins, we wait before re-trying.    
                 except:
@@ -358,7 +364,10 @@ while 1 == 1:
                 print('pins turning off and resetting pin_timer')
                 call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
                 pin_timer = 0
-                local_time = get_time()
+                try:
+                    local_time = get_time()
+                except:
+                    print('failed to get time')
 
                 #turning off pins for 5 mins
                 try:
