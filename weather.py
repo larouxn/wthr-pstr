@@ -366,29 +366,29 @@ while 1 == 1:
 
                 
         else:
-                print('pins turning off and resetting pin_timer')
-                call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
-                pin_timer = 0
-                try:
-                    local_time = get_time()
-                except:
-                    print('failed to get time')
+            print('pins turning off and resetting pin_timer')
+            call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
+            pin_timer = 0
+            try:
+                local_time = get_time()
+            except:
+                print('failed to get time')
 
-                #turning off pins for break, how long dictated by outside temp (v.rough proxy to room temp)
-                try:
-                        if temp <= 53:
-                            call(["logger", "-t", "weather", "60mins up, cold, so only 1min break"])
-                            time.sleep(120)
-                            clear_pins()
-                            time.sleep(60)
-                        else:
-                            call(["logger", "-t", "weather", "60mins up, warm, time for a 3min break"])
-                            clear_pins()
-                            time.sleep(180)
-                        
-                except:
-                        print('60mins up, time for a 3min break')
-                        time.sleep(180)
+            #turning off pins for break, how long dictated by outside temp (v.rough proxy to room temp)
+            try:
+                if temp <= 53:
+                    call(["logger", "-t", "weather", "60mins up, cold, so only 1min break"])
+                    time.sleep(120)
+                    clear_pins()
+                    time.sleep(60)
+                else:
+                    call(["logger", "-t", "weather", "60mins up, warm, time for a 3min break"])
+                    clear_pins()
+                    time.sleep(180)
+                    
+            except:
+                    print('60mins up, time for a 3min break')
+                    time.sleep(180)
 
 
 
