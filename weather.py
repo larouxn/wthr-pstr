@@ -260,7 +260,11 @@ while 1 == 1:
 
         #Turning on correct pins/icons
         pin_timer = 0
-        clear_pins()
+        try:
+            clear_pins()
+        except:
+            print('fail clear_pins')
+            
         #Class conversions
         Rain = ['Rain', 'Showers', 'A shower', 'Light rain shower', 'Flurries', 'T-storms', 'Snow', 'Mostly cloudy w/ showers', 'Partly sunny w/ showers', 'Mostly cloudy w/ T-Storms', 'Partly sunny w/ T-Storms', 'Mostly cloudy w/ flurries', 'Partly sunny w/ flurries', 'Mostly cloudy w/ snow', 'Ice', 'Sleet', 'Freezing rain', 'Rain and snow', 'Partly cloudy w/ showers', 'Mostly cloudy w/ showers', 'Partly cloudy w/ T-Storms', 'Mostly cloudy w/ T-Storms', 'Mostly cloudy w/ flurries', 'Mostly cloudy w/ snow']
         Cloud = ['Mostly cloudy', 'Fog', 'Partly cloudy', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds', 'Intermittent clouds']
@@ -348,11 +352,12 @@ while 1 == 1:
 
                     #Pulse - 1min off
                     if temp <= 53:
+                        print('too cold for pulsing')
+                    else:
                         clear_pins()
                         time.sleep(60)
                         pin_timer = pin_timer + 60
-                    else:
-                        print('too warm for pulsing')
+                        call(["logger", "-t", "weather", "just pulsed for 1min, outside temp above 12c"])
                     
                 # If there's problems turning on pins, we wait before re-trying.    
                 except:
@@ -369,30 +374,42 @@ while 1 == 1:
                 except:
                     print('failed to get time')
 
-                #turning off pins for 5 mins
+                #turning off pins for break, how long dictated by outside temp (v.rough proxy to room temp)
                 try:
-                        print('60mins up, time for a 3min break')
-                        call(["logger", "-t", "weather", "55mins up, time for a 5min break"])
-                        time.sleep(180)
-                        clear_pins()
+                        if temp <= 53:
+                            call(["logger", "-t", "weather", "60mins up, cold, so only 1min break"])
+                            time.sleep(120)
+                            clear_pins()
+                            time.sleep(60)
+                        else:
+                            call(["logger", "-t", "weather", "60mins up, warm, time for a 3min break"])
+                            clear_pins()
+                            time.sleep(180)
                         
                 except:
                         print('60mins up, time for a 3min break')
-                        call(["logger", "-t", "weather", "55mins up, timne for a 5min break"])
                         time.sleep(180)
 
 
 
         #Updates local_time
-        local_time = get_time()
-        print("time is "+(str(local_time)))
-        call(["logger", "-t", "weather", str(local_time)])
+        try:
+            local_time = get_time()
+            print("time is "+(str(local_time)))
+            call(["logger", "-t", "weather", str(local_time)])
+        except:
+            print('fail')
 
     else:
-        #sleeps and updates local_time
-        print('sleep_mode')
-        print("time is "+(str(local_time)))
-        call(["logger", "-t", "weather", str(local_time)])
+        try:
+            #sleeps and updates local_time
+            print('sleep_mode')
+            call(["logger", "-t", "weather", "sleep_mode"])
+            print("time is "+(str(local_time)))
+            call(["logger", "-t", "weather", str(local_time)])
+        except:
+            print('fail 1')
+            
         time.sleep(1800)
         
         #turning pins off for sleep mode
