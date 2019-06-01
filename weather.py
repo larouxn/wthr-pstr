@@ -352,7 +352,10 @@ while 1 == 1:
 
                     #Pulse - 1min off
                     if temp <= 53:
-                        print('too cold for pulsing')
+                        clear_pins()
+                        time.sleep(20)
+                        pin_timer = pin_timer + 20
+                        print('cold, so small pulse')
                     else:
                         clear_pins()
                         time.sleep(60)
