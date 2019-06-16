@@ -351,7 +351,8 @@ while 1 == 1:
                         print("just 3 mins on before 1 min off")
 
                     #Pulse - 1min off
-                    if temp <= 53:
+                    #If temp 16c or higher
+                    if temp <= 59:
                         clear_pins()
                         time.sleep(20)
                         pin_timer = pin_timer + 20
@@ -379,7 +380,8 @@ while 1 == 1:
 
             #turning off pins for break, how long dictated by outside temp (v.rough proxy to room temp)
             try:
-                if temp <= 53:
+                #If temp 16c or higher then sleep for longer
+                if temp <= 59:
                     call(["logger", "-t", "weather", "60mins up, cold, so only 1min break"])
                     time.sleep(120)
                     clear_pins()
