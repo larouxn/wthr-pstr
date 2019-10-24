@@ -41,7 +41,9 @@ def clear_pins():
         omega.pin_off(3)
         omega.pin_off(0)
         omega.pin_off(18)
-
+        omega.pin_off(1)
+        omega.pin_off(12)
+        
         omega.pin_off(19)
         omega.pin_off(4)
         omega.pin_off(5)
