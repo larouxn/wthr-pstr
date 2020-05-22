@@ -339,28 +339,28 @@ while 1 == 1:
                         print('20S')
                         call(["logger", "-t", "weather", "20S"])
 
-                    if pin_timer <= 299:
+                    if pin_timer <= 90:
                         #less sleep while pins are on
-                        time.sleep(300)
-                        pin_timer = pin_timer + 300
+                        time.sleep(70)
+                        pin_timer = pin_timer + 91
                     else:
-                        #Pulse - 3mins on
-                        time.sleep(180)
-                        pin_timer = pin_timer + 180
+                        #Pulse - 30s on
+                        time.sleep(20)
+                        pin_timer = pin_timer + 30
                         call(["logger", "-t", "weather", "just 3 mins on before 1 min off"])
                         print("just 3 mins on before 1 min off")
 
                     #Pulse - 1min off
-                    #If temp 18c or lower, then pulse for less
-                    if temp <= 64:
+                    #If temp less than 14c we turn off for less time
+                    if temp <= 57:
                         clear_pins()
-                        time.sleep(20)
-                        pin_timer = pin_timer + 20
+                        time.sleep(90)
+                        pin_timer = pin_timer + 60
                         print('cold, so small pulse')
                     else:
                         clear_pins()
                         time.sleep(120)
-                        pin_timer = pin_timer + 120
+                        pin_timer = pin_timer + 135
                         call(["logger", "-t", "weather", "just pulsed for 1min, outside temp above 12c"])
 
                 # If there's problems turning on pins, we wait before re-trying.
@@ -380,8 +380,8 @@ while 1 == 1:
 
             #turning off pins for break, how long dictated by outside temp (v.rough proxy to room temp)
             try:
-                #If temp 18c or lower then sleep for shorter
-                if temp <= 64:
+                #If temp 14c or lower then sleep for shorter
+                if temp <= 57:
                     call(["logger", "-t", "weather", "60mins up, cold, so only 1min break"])
                     time.sleep(120)
                     clear_pins()
