@@ -41,14 +41,14 @@ try:
     clear_pins()
     print('GPIO enabled')
     call(["logger", "-t", "weather", "GPIO enabled"])
-           
+
 except:
     print('failed to set up pins')
     call(["logger", "-t", "weather", "failed to set up pins"])
-           
+
 #getting maxmind info for own IP address
 try:
-    
+
     r = requests.get('https://geoip.maxmind.com/geoip/v2.1/city/me', auth=(max1, max2))
     maxmind_info = r.json()
     location_info = maxmind_info['location']
@@ -107,7 +107,7 @@ try:
     #Creating entries for every hour of the day
     for i in range(25):
             forecast[i] = '0'
-            
+
     #Adding :00 to each key
     forecast = {f'{k}:00': v for k, v in forecast.items()}
 
@@ -123,13 +123,13 @@ while 1 == 1:
     while local_time >= 4 and local_time <= 23:
         print('in second loop')
         call(["logger", "-t", "weather", "in second loop"])
-        
+
         #Saving 9am and 12pm weather so can add it back in after old weather addition
         if local_time >= 21 and local_time <= 25:
             nine_saved_weather = forecast['9:00']
             twelve_saved_weather = forecast['12:00']
 
-            
+
         #Get weather data for specified location request, then parse to list
         weatherURL= 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/' + geokey + '?apikey=' + api
 
@@ -139,7 +139,7 @@ while 1 == 1:
 
                 #Function creates dictionary with hour:weather cond
                 def build_dict(x):
-                    p = weatherdata[x]   
+                    p = weatherdata[x]
                     H = p['DateTime']
                     h = (H[11:16])
                     F = p['IconPhrase']
@@ -151,14 +151,14 @@ while 1 == 1:
 
         #create list of numbers to use in creating forecast w/ build_dict
         numbers = [0,1,2,3,4,5,6,7,8,9,10,11]
-        
+
         try:
             for item in numbers:
                     build_dict(item)
         except:
             print('failed to build dict')
 
-                
+
         #accounting for weird AccuWeather format change to 08:00 from 8:00 in early morning.
         try:
             forecast['8:00'] = forecast['08:00']
@@ -171,7 +171,7 @@ while 1 == 1:
         try:
             #Create dictionary
             old_forecast = {'test':'0'}
-                    
+
             #Adding :00 to each key
             old_forecast = {f'{k}:00': v for k, v in old_forecast.items()}
 
@@ -182,7 +182,7 @@ while 1 == 1:
 
             #Function creates dictionary with hour:weather cond
             def old_build_dict(x):
-                p = old_weatherdata[x]   
+                p = old_weatherdata[x]
                 H = p['LocalObservationDateTime']
                 h = (H[11:14])
                 F = p['WeatherText']
@@ -200,10 +200,10 @@ while 1 == 1:
             #temporarily make int, instead of float
             prev = int(prev)
             ext_prev = int(ext_prev)
-            
+
         except:
             print('getting historical weather data error')
-        
+
         #Just 5 hours in the past
         if local_time >= 5 and local_time <= 12:
             for i in range(prev, int(local_time)):
@@ -217,11 +217,11 @@ while 1 == 1:
                 except:
                     print('')
 
-        #12 hours in the past        
+        #12 hours in the past
         if local_time >= 12 and local_time <= 23:
 
             for i in range(ext_prev, int(local_time)):
-            
+
                 if int(i) <= 9 and int(i) >= 1:
                     j = (str(i)).zfill(2)
                 else:
@@ -231,14 +231,14 @@ while 1 == 1:
                 except:
                     print('')
 
-                    
-        ##################### End of old weather data section ###########        
+
+        ##################### End of old weather data section ###########
 
 
         #putting saved weather back in for 9am and 12pm (so it's todays not tomorrows)
         if local_time >= 21 and local_time <= 25:
             forecast['9:00'] = nine_saved_weather
-            forecast['12:00'] = twelve_saved_weather          
+            forecast['12:00'] = twelve_saved_weather
 
         print(forecast)
         call(["logger", "-t", "weather", str(forecast)])
@@ -252,9 +252,9 @@ while 1 == 1:
                 temp = temp_details['Value']
                 temp = int(temp)
                 print(temp)
-                
+
         except:
-                time.sleep(o)
+                time.sleep(0)
 
         #######GPIO_Allocation#######
 
@@ -264,7 +264,7 @@ while 1 == 1:
             clear_pins()
         except:
             print('fail clear_pins')
-            
+
         #Class conversions
         Rain = ['Rain', 'Drizzle', 'Showers', 'A shower', 'Light rain shower', 'Flurries', 'T-storms', 'Snow', 'Mostly cloudy w/ showers', 'Partly sunny w/ showers', 'Mostly cloudy w/ T-Storms', 'Partly sunny w/ T-Storms', 'Mostly cloudy w/ flurries', 'Partly sunny w/ flurries', 'Mostly cloudy w/ snow', 'Ice', 'Sleet', 'Freezing rain', 'Rain and snow', 'Partly cloudy w/ showers', 'Mostly cloudy w/ showers', 'Partly cloudy w/ T-Storms', 'Mostly cloudy w/ T-Storms', 'Mostly cloudy w/ flurries', 'Mostly cloudy w/ snow']
         Cloud = ['Mostly cloudy', 'Fog', 'Partly cloudy', 'Cloudy', 'Dreary (Overcast)', 'Fog', 'Some clouds', 'Some clouds', 'Intermittent clouds']
@@ -274,9 +274,9 @@ while 1 == 1:
                 print(pin_timer)
                 call(["logger", "-t", "weather", str(pin_timer)])
                 try:
-                    
+
                     #8am
-                    if forecast['8:00'] in Rain:                        
+                    if forecast['8:00'] in Rain:
                         omega.pin_on(2)
                         print('8R')
                         call(["logger", "-t", "weather", "8R"])
@@ -292,12 +292,12 @@ while 1 == 1:
                         call(["logger", "-t", "weather", "8S"])
 
                     #12pm
-                    if forecast['12:00'] in Rain: 
+                    if forecast['12:00'] in Rain:
                         omega.pin_on(15)
                         print('12R')
                         call(["logger", "-t", "weather", "12R"])
 
-                    if forecast['12:00'] in Cloud: 
+                    if forecast['12:00'] in Cloud:
                         omega.pin_on(46)
                         print('12C')
                         call(["logger", "-t", "weather", "12C"])
@@ -362,13 +362,13 @@ while 1 == 1:
                         time.sleep(120)
                         pin_timer = pin_timer + 120
                         call(["logger", "-t", "weather", "just pulsed for 1min, outside temp above 12c"])
-                    
-                # If there's problems turning on pins, we wait before re-trying.    
+
+                # If there's problems turning on pins, we wait before re-trying.
                 except:
                     pin_timer = pin_timer + 120
                     time.sleep(120)
 
-                
+
         else:
             print('pins turning off and resetting pin_timer')
             call(["logger", "-t", "weather", "pins turning off and resetting pin_timer"])
@@ -390,7 +390,7 @@ while 1 == 1:
                     call(["logger", "-t", "weather", "60mins up, warm, time for a 3min break"])
                     clear_pins()
                     time.sleep(180)
-                    
+
             except:
                     print('60mins up, time for a 3min break')
                     time.sleep(180)
@@ -414,14 +414,13 @@ while 1 == 1:
             call(["logger", "-t", "weather", str(local_time)])
         except:
             print('fail 1')
-            
+
         time.sleep(1800)
-        
+
         #turning pins off for sleep mode
         try:
             clear_pins()
         except:
-            print('')       
+            print('')
 
         local_time = get_time()
-        
